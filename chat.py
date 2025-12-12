@@ -11,11 +11,13 @@ if not API_KEY:
 API_URL = "https://openrouter.ai/api/v1/chat/completions"
 
 HEADERS = {
-    "Authorization": f"Bearer {API_KEY}",
+     "Authorization": f"Bearer {API_KEY}",
     "Content-Type": "application/json",
+    "HTTP-Referer": "http://localhost",
+    "X-Title": "MyChatbot"
 }
 
-def ask_openrouter(message, model="dolphin3.0-r1-mistral-24b:free"):
+def ask_openrouter(message, model="meta-llama/llama-3.1-8b-instruct:free"):
     
     payload = {
         "model": model,
