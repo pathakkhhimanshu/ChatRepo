@@ -21,32 +21,21 @@ def ask_ai(user_message):
 
     data = {
         "model": "mistralai/mistral-7b-instruct:free",
-        "messages": [
-            {"role": "user", "content": user_message}
-        ]
+        "messages": [{"role": "user", "content": user_message}]
+}
 
-    }
+    response = requests.post(url, headers=headers, json=data,)
+    return response.json()["choices"][0]["message"]["content"]
 
-    response = requests.post(url, headers=headers, json=data, timeout=20)
-    result = response.json()
-
-    if "choices" in result:
-        return result["choices"][0]["message"]["content"]
-    elif "error" in result:
-        return f"Error: {result['error'].get('message')}"
-    else:
-        return "Error: Unexpected response from AI service."
-    
-    @app.route("/")  
-    def home():
-        return render_template("page.html")
-    
-    @app.route("/chat", methods=["POST"])
-    def chat():
-        user_message = request.json.get("message")
-    ai_reply = ask_ai(user_message)
-    return jsonify({"reply": ai_reply})
+@app.route("/", methods=["GET", "POST"])
+def home():
+    chat = []
+    if request.method == "POST":
+        user_msg = request.form.get("message")
+        ai_msg = ask_ai(user_msg)
+        chat.append(("You", user_msg))
+        chat.append(("AI", ai_msg))
+    return render_template("page.html", chat=chat)
 
 app.run(debug=True)
-        
  
