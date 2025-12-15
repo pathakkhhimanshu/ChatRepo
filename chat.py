@@ -15,7 +15,7 @@ def ask_ai(user_message):
     headers = { 
         "Authorization": f"Bearer {API_KEY}",
         "Content-Type": "application/json",
-        "HTTP-Referer": "http://Localhost:5000",
+        "HTTP-Referer": "http://localhost:5000",
         "X-Title": "LearningChatbot"
     }
 
@@ -24,8 +24,16 @@ def ask_ai(user_message):
         "messages": [{"role": "user", "content": user_message}]
 }
 
-    response = requests.post(url, headers=headers, json=data,)
-    return response.json()["choices"][0]["message"]["content"]
+    response = requests.post(url, headers=headers, json=data, timeout=20)
+    result = response.json()
+
+    if "choices" in result:
+         return result["choices"][0]["message"]["content"]
+    elif "error" in result:
+         return "AI ERROR: " + result["error"].get("message")
+    else:
+       return "AI returned an unexpected response"
+
 
 @app.route("/", methods=["GET", "POST"])
 def home():
