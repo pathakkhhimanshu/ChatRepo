@@ -43,7 +43,11 @@ def home():
     chat = []
     if request.method == "POST":
         user_msg = request.form.get("message")
+        if not user_msg:
+          return render_template("page.html", chat=chat)
+
         ai_msg = ask_ai(user_msg)
+
         chat.append(("You", user_msg))
         chat.append(("AI", ai_msg))
     return render_template("page.html", chat=chat)
