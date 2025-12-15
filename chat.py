@@ -14,6 +14,7 @@ def ask_ai(user_message):
 
     headers = { 
         "Authorization": f"Bearer {API_KEY}",
+        "X-Api-Key": API_KEY,
         "Content-Type": "application/json",
         "HTTP-Referer": "http://localhost:5000",
         "X-Title": "LearningChatbot"
@@ -44,6 +45,8 @@ def home():
         chat.append(("You", user_msg))
         chat.append(("AI", ai_msg))
     return render_template("page.html", chat=chat)
+
+print("API KEY LOADED:", API_KEY[:10] if API_KEY else "NO KEY")
 
 app.run(debug=True)
  
