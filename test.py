@@ -12,8 +12,9 @@ headers = {
 }
 
 data = {
-    "model": "mistralai/mistral-7b-instruct:free",
-    "messages": [{"role": "user", "content": "Say hello"}]
+    "model": "nousresearch/nous-hermes-2-mistral-7b:free",
+    "messages": [{"role": "user", "content": "Say hello"}],
+     "max_tokens": 200
 }
 
 r = requests.post(url, headers=headers, json=data)
