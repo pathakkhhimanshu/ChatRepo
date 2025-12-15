@@ -6,6 +6,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 API_KEY = os.getenv("OPENROUTER_API_KEY")
+print("DEBUG API KEY =", API_KEY)
+
 
 app = Flask(__name__)
 
@@ -13,11 +15,10 @@ def ask_ai(user_message):
     url = "https://openrouter.ai/api/v1/chat/completions"
 
     headers = { 
-        "Authorization": f"Bearer {API_KEY}",
-        "X-Api-Key": API_KEY,
-        "Content-Type": "application/json",
-        "HTTP-Referer": "http://localhost:5000",
-        "X-Title": "LearningChatbot"
+         "Authorization": f"Bearer {API_KEY}",
+         "Content-Type": "application/json",
+         "HTTP-Referer": "http://localhost",
+         "X-Title": "PythonChatbot"
     }
 
     data = {
