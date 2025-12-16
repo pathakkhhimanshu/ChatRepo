@@ -1,12 +1,12 @@
-from flask import Flask , request , jsonify, render_template
+from flask import Flask , request , render_template
 import requests 
 import os 
-from google import genai
 from dotenv import load_dotenv
 
 load_dotenv()
 
 API_KEY = os.getenv("GEMINI_API_KEY")
+print(f"Loaded API Key: {API_KEY[:20]}..." if API_KEY else "No key loaded!")
 if not API_KEY:
     raise RuntimeError("GEMINI_API_KEY not loaded")
 
@@ -14,26 +14,24 @@ if not API_KEY:
 app = Flask(__name__)
 
 def ask_ai(user_message):
-    url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent"
+    print(f"ask_ai called with: {user_message}") 
+    url =  f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={API_KEY}"
 
     headers = { 
-         "Authorization": f"Bearer {API_KEY}",
-         "Content-Type": "application/json",
-         "HTTP-Referer": "http://localhost",
-         "X-Title": "PythonChatbot"
+         "Content-Type": "application/json"
     }
 
-    data = {
-        "model": "gemini-2.5-flash:generateContent",
-        "messages": [{"role": "user", "content": user_message}],
-        "max_tokens": 200
-}
-
+    data =  {"contents": [{"parts": [{"text": user_message}]}]}
+    
+    print(f"Making request to: {url[:80]}...")
     response = requests.post(url, headers=headers, json=data, timeout=20)
     result = response.json()
+     
+    print(f"Status Code: {response.status_code}")  
+    print(f"Full Response: {result}")
 
-    if "choices" in result:
-         return result["choices"][0]["message"]["content"]
+    if "candidates" in result:
+         return result["candidates"][0]["content"]["parts"][0]["text"]
     elif "error" in result:
          return "AI ERROR: " + result["error"].get("message")
     else:
@@ -54,6 +52,6 @@ def home():
         chat.append(("AI", ai_msg))
     return render_template("page.html", chat=chat)
 
-
-app.run(debug=True)
+if __name__ == "__main__":
+    app.run(debug=True)      #
  
