@@ -6,7 +6,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 API_KEY = os.getenv("OPENROUTER_API_KEY")
-print("DEBUG API KEY =", API_KEY)
+if not API_KEY:
+    raise RuntimeError("OPENROUTER_API_KEY not loaded")
 
 
 app = Flask(__name__)
@@ -52,7 +53,6 @@ def home():
         chat.append(("AI", ai_msg))
     return render_template("page.html", chat=chat)
 
-print("API KEY LOADED:", API_KEY[:10] if API_KEY else "NO KEY")
 
 app.run(debug=True)
  
