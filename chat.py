@@ -1,19 +1,20 @@
 from flask import Flask , request , jsonify, render_template
 import requests 
 import os 
+from google import genai
 from dotenv import load_dotenv
 
 load_dotenv()
 
-API_KEY = os.getenv("OPENROUTER_API_KEY")
+API_KEY = os.getenv("GEMINI_API_KEY")
 if not API_KEY:
-    raise RuntimeError("OPENROUTER_API_KEY not loaded")
+    raise RuntimeError("GEMINI_API_KEY not loaded")
 
 
 app = Flask(__name__)
 
 def ask_ai(user_message):
-    url = "https://openrouter.ai/api/v1/chat/completions"
+    url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent"
 
     headers = { 
          "Authorization": f"Bearer {API_KEY}",
@@ -23,7 +24,7 @@ def ask_ai(user_message):
     }
 
     data = {
-        "model": "nousresearch/nous-hermes-2-mistral-7b:free",
+        "model": "gemini-2.5-flash:generateContent",
         "messages": [{"role": "user", "content": user_message}],
         "max_tokens": 200
 }
