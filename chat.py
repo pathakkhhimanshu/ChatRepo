@@ -13,7 +13,6 @@ if not API_KEY:
 app = Flask(__name__)
 
 def ask_ai(user_message):
-    print(f"ask_ai called with: {user_message}") 
     url =  f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={API_KEY}"
 
     headers = { 

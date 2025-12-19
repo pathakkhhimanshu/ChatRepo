@@ -71,6 +71,22 @@ input[type="text"] {
     outline: none;
 }
 
+input[type="text"]::placeholder {
+
+ color: #64748b;
+
+}
+
+button {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    background: #38bdf8;
+    color: #020617;
+    font-weight: bold;
+    cursor: pointer;
+}
+
 
 
 
