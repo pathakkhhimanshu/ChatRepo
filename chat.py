@@ -6,7 +6,6 @@ from dotenv import load_dotenv
 load_dotenv()
 
 API_KEY = os.getenv("GEMINI_API_KEY")
-print(f"Loaded API Key: {API_KEY[:20]}..." if API_KEY else "No key loaded!")
 if not API_KEY:
     raise RuntimeError("GEMINI_API_KEY not loaded")
 
@@ -23,12 +22,9 @@ def ask_ai(user_message):
 
     data =  {"contents": [{"parts": [{"text": user_message}]}]}
     
-    print(f"Making request to: {url[:80]}...")
     response = requests.post(url, headers=headers, json=data, timeout=20)
     result = response.json()
      
-    print(f"Status Code: {response.status_code}")  
-    print(f"Full Response: {result}")
 
     if "candidates" in result:
          return result["candidates"][0]["content"]["parts"][0]["text"]
@@ -53,5 +49,5 @@ def home():
     return render_template("page.html", chat=chat)
 
 if __name__ == "__main__":
-    app.run(debug=True)      #
+    app.run(debug=True)      
  
