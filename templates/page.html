@@ -3,28 +3,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ai chatbot</title>
+    <title>AI Chatbot</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <div class="chat-container">
-        <h2>AI Chatbot</h2>
 
-        <div id="chatbox">
-            {% for sender, message in chat %}
+<div class="chat-container">
 
-                <div class="{{ sender|lower }}">
-                    <b>{{ sender }}:</b> {{ message }}
-                </div>
-                
-                 {% endfor %}
-            </div>
-
-             <form method="post">
-        <input type="text" name="message" placeholder="Type your message">
-        <button type="submit">Send</button>
-    </form>
+    <!-- Header -->
+    <div class="chat-header">
+        <h1>AI Chatbot</h1>
+        <form method="post" action="/clear"
+              onsubmit="return confirm('Are you sure you want to clear all chat history?');">
+            <button type="submit" class="clear-btn" title="Clear chat history">
+                🗑
+            </button>
+        </form>
     </div>
-    
+
+    <!-- Chat History -->
+    <div class="chat-history" id="chat-history">
+     
+        {% if chat|length == 0 %}
+            <div class="empty-state">
+                <p>Start a conversation with the AI</p>
+            </div>
+        {% else %}
+            {% for msg in chat %}
+            <div id="typing-indicator"
+     class="chat-row ai"
+     style="display:none;">
+    <div class="message-wrapper">
+        <div class="sender-label">AI</div>
+        <div class="bubble" style="opacity:0.6;">
+            AI is thinking…
+        </div>
+    </div>
+</div>
+
+                <div class="chat-row {{ 'user' if msg.sender == 'You' else 'ai' }}">
+                    <div class="message-wrapper">
+                        <div class="sender-label">{{ msg.sender }}</div>
+                        <div class="bubble">{{ msg.message }}</div>
+                        <div class="time">{{ msg.time }}</div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <!-- Error -->
+    {% if error %}
+    <div class="error-banner">{{ error }}</div>
+    {% endif %}
+
+    <!-- Input Area -->
+    <div class="chat-input">
+        <form id="chat-form">
+            <input
+                type="text"
+                name="message"
+                id="message-input"
+                placeholder="Type your message..."
+                required
+                autocomplete="off"
+                maxlength="5000"
+            >
+            <button type="submit" id="send-btn">Send</button>
+        </form>
+    </div>
+
+</div>
+
+<script>
+const form = document.getElementById("chat-form");
+const input = document.getElementById("message-input");
+const chatHistory = document.getElementById("chat-history");
+
+function addMessage(sender, message, time, isThinking=false) {
+    const row = document.createElement("div");
+    row.className = "chat-row " + (sender === "You" ? "user" : "ai");
+
+    const wrapper = document.createElement("div");
+    wrapper.className = "message-wrapper";
+
+    const label = document.createElement("div");
+    label.className = "sender-label";
+    label.innerText = sender;
+
+    const bubble = document.createElement("div");
+    bubble.className = "bubble";
+    bubble.innerText = message;
+
+    if (isThinking) {
+        bubble.style.opacity = "0.6";
+        bubble.id = "thinking-bubble";
+    }
+
+    const timeDiv = document.createElement("div");
+    timeDiv.className = "time";
+    timeDiv.innerText = time || "";
+
+    wrapper.appendChild(label);
+    wrapper.appendChild(bubble);
+    wrapper.appendChild(timeDiv);
+    row.appendChild(wrapper);
+    chatHistory.appendChild(row);
+
+    chatHistory.scrollTop = chatHistory.scrollHeight;
+}
+
+form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const text = input.value.trim();
+    if (!text) return;
+
+    // 1️⃣ Show user message immediately
+    addMessage("You", text, "now");
+
+    // 2️⃣ Clear input immediately
+    input.value = "";
+
+    // 3️⃣ Show AI thinking after user message
+    addMessage("AI", "AI is thinking…", "", true);
+
+    try {
+        const response = await fetch("/api/chat", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: new URLSearchParams({ message: text })
+        });
+
+        const data = await response.json();
+
+        // Remove thinking bubble
+        const thinking = document.getElementById("thinking-bubble");
+        if (thinking) {
+            thinking.parentElement.parentElement.remove();
+        }
+
+        // Show AI response
+        addMessage("AI", data.ai.message, data.ai.time);
+
+    } catch (err) {
+        const thinking = document.getElementById("thinking-bubble");
+        if (thinking) {
+            thinking.innerText = "⚠️ Error getting response";
+        }
+    }
+});
+</script>
+
+
 </body>
 </html>

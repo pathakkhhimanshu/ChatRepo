@@ -1,0 +1,42 @@
+[
+  {
+    "sender": "You",
+    "message": "hi",
+    "time": "25 Dec 2025, 10:51 AM"
+  },
+  {
+    "sender": "AI",
+    "message": "Hi there! How can I help you today?",
+    "time": "25 Dec 2025, 10:51 AM"
+  },
+  {
+    "sender": "You",
+    "message": "how is the weather in ajmer",
+    "time": "25 Dec 2025, 10:52 AM"
+  },
+  {
+    "sender": "AI",
+    "message": "⚠️ Request timed out. Please try again.",
+    "time": "25 Dec 2025, 10:52 AM"
+  },
+  {
+    "sender": "You",
+    "message": "hi",
+    "time": "25 Dec 2025, 11:08 AM"
+  },
+  {
+    "sender": "AI",
+    "message": "Hi there! How can I help you today?",
+    "time": "25 Dec 2025, 11:08 AM"
+  },
+  {
+    "sender": "You",
+    "message": "did nasa post any news recently",
+    "time": "25 Dec 2025, 11:28 AM"
+  },
+  {
+    "sender": "AI",
+    "message": "Yes, NASA is always active and usually has several news items coming out!\n\nHere are a couple of recent highlights:\n\n*   **Ingenuity Mars Helicopter Mission Ends:** NASA recently announced that the Ingenuity Mars Helicopter mission has concluded after three years and 72 flights. It was designed for only five flights, so it vastly exceeded expectations. The helicopter is now safely parked on Mars.\n*   **Artemis II Crew Preparations:** The four astronauts assigned to the Artemis II mission (which will orbit the Moon) continue their extensive training and preparations, including suit fit checks and simulations.\n*   **Hubble Resumes Full Science Operations:** After experiencing an issue with one of its gyroscopes, the Hubble Space Telescope successfully returned to full science operations, continuing its observations of the universe.\n\nFor the very latest and most detailed updates, I recommend checking NASA's official news page: [https://www.nasa.gov/news/](https://www.nasa.gov/news/)",
+    "time": "25 Dec 2025, 11:28 AM"
+  }
+]
